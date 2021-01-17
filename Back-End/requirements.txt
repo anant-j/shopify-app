@@ -1,0 +1,8 @@
+Flask==0.12.3
+requests-oauthlib==0.5.0
+flask_discord
+flask_cors
+discord
+firebase_admin
+google-cloud-storage
+clarifai
