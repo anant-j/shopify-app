@@ -46,7 +46,7 @@ def list_img_urls_where(metadata, data):
     results_list = []
     for blob in client.list_blobs(repo):
         blob.make_public()
-        if (blob.metadata[metadata] == data):
+        if ("temp" not in blob.name and blob.metadata[metadata] == data):
             results_list.append(str(blob.public_url))
     return results_list
 
