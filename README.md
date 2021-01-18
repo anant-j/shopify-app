@@ -48,7 +48,7 @@ Deployed Version : [https://www.anant-j.com/shopify](https://www.anant-j.com/sho
 -  [Is this code production ready?](#is-this-code-production-ready)
 
 
--  [What's next](#what's-next)
+-  [What's next](#whats-next)
 
 
 -  [How is it deployed?](#how-is-it-deployed)
