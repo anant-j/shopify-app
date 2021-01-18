@@ -28,7 +28,7 @@
                     onsubmit="alert('Please wait while your image uploads.\n You will be redirected to your gallery if the upload was successful.\n Press ok to continue uploading the image.');">
                     <h4 style="margin: 0px !important">
                         Select an image to upload.<br />Accepted formats : .jpeg, .jpg,
-                        .png, .gif
+                        .png, .gif<br> Maximum file size : 6 MB
                     </h4>
                     <input name="uploadedfile" id="fileElem" single onchange="VerifyFileNameAndFileSize()"
                         accept="image/*" type="file" /><br /><br />
@@ -177,8 +177,8 @@
             }
             var content;
             var size = file.size;
-            if (size != null && size / (1024 * 1024) > 3) {
-                alert("size");
+            if (size != null && size / (1024 * 1024) > 6) {
+                alert("File size too big");
                 document.getElementById("GetFile").value = null;
                 return false;
             }
