@@ -47,7 +47,9 @@ Deployed Version : [https://www.anant-j.com/shopify](https://www.anant-j.com/sho
 
 -  [Is this code production ready?](#is-this-code-production-ready)
 
-  
+
+-  [What's next](#what's-next)
+
 
 -  [How is it deployed?](#how-is-it-deployed)
 
@@ -149,6 +151,14 @@ The code (back end and front end) can be deployed for testing once the secret ke
 
 While edge cases have been considered, errors might still arise in the code.
 This code is **not** suitable to be used in production applications. 
+
+---
+
+### What's Next?
+Some potential future features:
+- Rate limiting based on number of uploads/requests in a minute.
+- Free/Paid subscriptions with different size caps.
+- Using Clarifai API to autogenerate relevant tags for uploaded images and then implementing image search with said tags.
 
 ---
 
