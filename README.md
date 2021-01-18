@@ -172,15 +172,10 @@ Here are the external APIs used:
   
 
 |API | Purpose|
-
 | -- | -- |
-
 |Google's Firebase Cloud Storage| Storing images in the cloud.
-
 |Google's Firebase Cloud Firestore| To store user's statistics.
-
 |Clarifai API| To determine if an image is SFW or NSFW.
-
 |Discord Oauth 2.0| Log in implemented via Discord.
 
 ![Tech Stack](https://storage.googleapis.com/imgr-repo.appspot.com/VitdDVmdBf4tDwJoAuP5Qp5sTTIa4rno.png)  
@@ -220,25 +215,15 @@ Here are the external APIs used:
 The flask back-end has the following endpoints with their functionalities:
 
 | Endpoint | Description | Login Required
-
 |--|--| --
-
 | login | Returns a Discord Oauth link that the user is redirected to | ❌
-
 | callback | Called by the Discord's Oauth servers to verify login and return to the main webpage| :heavy_check_mark:
-
 |userdata| Returns the user's email, as well as their upload statistics| :heavy_check_mark:
-
 |userimages| Returns links to all the images uploaded by the user| :heavy_check_mark:
-
 |get_all_sfw| Returns links to all SFW images | ❌
-
 |get_all_nsfw| Returns links to all SFW images |:heavy_check_mark:
-
 |upload| 1. Uploads image temporarily to storage and get public url<br>2. Runs this public URL though Clarifai NSFW model, check if image is SFW or NSFW<br>3.Uploads the image with the correct metadata<br>4. Updates user's statistics|:heavy_check_mark:
-
 |delete| Deletes the user specified image by obtaining image and checking if the uploader is the same as requester | :heavy_check_mark:
-
 |logout| Logs out current user | :heavy_check_mark:
 
 
