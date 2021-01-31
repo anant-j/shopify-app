@@ -4,7 +4,7 @@ from clarifai.rest import ClarifaiApp
 
 my_directory = os.path.dirname(os.path.abspath(__file__))
 
-with open(my_directory + '/secrets.json', 'r') as myfile:
+with open(my_directory + '/secrets/secrets.json', 'r') as myfile:
     data = myfile.read()
 obj = json.loads(data)
 

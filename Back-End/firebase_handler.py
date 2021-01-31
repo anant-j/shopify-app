@@ -1,12 +1,12 @@
 from google.cloud import storage
 from firebase_admin import credentials, firestore, initialize_app
 
-cred = credentials.Certificate('cred.json')
+cred = credentials.Certificate('secrets/cred.json')
 default_app = initialize_app(cred)
 db = firestore.client()
 
 repo = cred.project_id + ".appspot.com"
-client = storage.Client.from_service_account_json('cred.json')
+client = storage.Client.from_service_account_json('secrets/cred.json')
 bucket = client.get_bucket(repo)
 
 

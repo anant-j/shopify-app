@@ -1,8 +1,8 @@
 ## Back-End is composed of 3 python files, and 2 credential files.
 
 ### To run:
-1. Fill secrets.json
-2. Obtain cred.json from [here](https://firebase.google.com/docs/web/setup).
+1. Fill secrets/secrets.json
+2. Obtain secrets/cred.json from [here](https://firebase.google.com/docs/web/setup).
 3. Install requirements.txt via pip
 4. Run main.py
 
