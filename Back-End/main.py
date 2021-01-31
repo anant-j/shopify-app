@@ -215,16 +215,12 @@ def uploadimg():
                 else:
                     # Add extension to 32 byte file name
                     filename = filename + file_ext
-            # Create a temporary blob
-            tempblob = storage.get_blob("temp/" + filename)
-            # Upload file to temporary blob
-            storage.upload_to_storage(tempblob, uploaded_file)
-            tempblob.make_public()  # Make temporary blob publicly accessible
-            # Get temporary blob's URL, send it through Clarifai's API
-            NSFW = clarifai.is_NSFW(tempblob.public_url)
-            tempblob.delete()  # Delete temporary blob
-            # Set file pointer to initial index
-            uploaded_file.seek(0)
+            blob = storage.get_blob(filename)  # Create blob for file
+            # Upload file to the blob
+            storage.upload_to_storage(blob, uploaded_file)
+            blob.make_public()  # Make blob publicly accessible
+            # Get blob's URL, send it through Clarifai's API
+            NSFW = clarifai.is_NSFW(blob.public_url)
             data = storage.getAllUserData(email)  # Get all User's data
             # If there are no stats for the user, set up the "stats" dictionary
             if("stats" not in data):
@@ -235,10 +231,6 @@ def uploadimg():
             # If there is no "images" array for the user, set up array
             if("images" not in data):
                 data["images"] = []
-            blob = storage.get_blob(filename)  # Create blob for file
-            # Upload file to the blob
-            storage.upload_to_storage(blob, uploaded_file)
-            blob.make_public()  # Make blob publicly accessible
             if(NSFW):  # If image is NSFW
                 # Update metadata
                 metadata = {'type': 'NSFW', 'uploader': email,
