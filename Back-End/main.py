@@ -70,6 +70,11 @@ discord = DiscordOAuth2Session(app)
 def noapi():
     return redirect(redirectAddress)
 
+# Status for health check
+@app.route('/status')
+def status():
+    return ("up")
+
 
 # Login endpoint
 # Returns the login url that the webpage is redirected to.
@@ -112,7 +117,7 @@ def callback():
 def userData():
     try:
         if(discord.authorized):  # If user is authorized/logged in
-            email = discord.fetch_user().email  # Get user's email address
+            email = str(discord.fetch_user()) # Get user's email address
             data = storage.getUserStats(email)
             resp = make_response(jsonify(email=email, stats=data))
             return resp
@@ -135,7 +140,7 @@ def userData():
 def userImages():
     try:
         if(discord.authorized):  # If user is authorized/logged in
-            email = discord.fetch_user().email  # Get user's email address
+            email = str(discord.fetch_user()) # Get user's email address
             result = storage.list_img_urls_where("uploader", email)
             return (",".join(result))
         else:
@@ -191,7 +196,7 @@ def get_nsfw_images():
 def uploadimg():
     try:
         if(discord.authorized):  # If user is authorized/logged in
-            email = discord.fetch_user().email  # Get user's email address
+            email = str(discord.fetch_user()) # Get user's email address
             # Get the uploaded file
             uploaded_file = request.files["uploadedfile"]
             # Get the uploaded file's name
@@ -274,7 +279,7 @@ def uploadimg():
 def delete_image():
     try:
         if(discord.authorized):  # If user is authorized/logged in
-            email = discord.fetch_user().email  # Get user's email address
+            email = str(discord.fetch_user())  # Get user's email address
             imageid = request.args.get('id')  # Get requested image's id
             data = storage.getAllUserData(email)  # Get all User's data
             # For every blob in all images
@@ -314,7 +319,6 @@ def logout():
     session.clear()
     resp = make_response("Logged out")
     return (resp)
-
 
 # 404 error handler
 @app.errorhandler(404)
