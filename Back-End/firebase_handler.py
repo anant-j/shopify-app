@@ -15,8 +15,8 @@ def getUserStats(email):
     doc_ref = db.collection(u'users').document(email)
     doc = doc_ref.get()
     if doc.exists:
-        return(doc.to_dict()["stats"])
-    return ({})
+        return doc.to_dict()["stats"]
+    return {}
 
 
 # Get user's data
@@ -24,8 +24,8 @@ def getAllUserData(email):
     doc_ref = db.collection(u'users').document(email)
     doc = doc_ref.get()
     if doc.exists:
-        return(doc.to_dict())
-    return ({})
+        return doc.to_dict()
+    return {}
 
 
 # Check if the image already exists in storage
@@ -37,7 +37,7 @@ def blob_exists(filename):
 # Updates the database for given user with the provided data
 def update_db(email, data):
     db.collection(u'users').document(email).set(data)
-    return("DONE")
+    return "DONE"
 
 
 # Get a list of url's for images whose metadata's properties match the
@@ -46,19 +46,19 @@ def list_img_urls_where(metadata, data):
     results_list = []
     for blob in client.list_blobs(repo):
         blob.make_public()
-        if ("temp" not in blob.name and blob.metadata[metadata] == data):
+        if "temp" not in blob.name and blob.metadata[metadata] == data:
             results_list.append(str(blob.public_url))
     return results_list
 
 
 # Get the blob for provided url
 def get_blob(url):
-    return (bucket.blob(url))
+    return bucket.blob(url)
 
 
 # Returns a list of all blobs in storage
 def get_blobs_list():
-    return (client.list_blobs(repo))
+    return client.list_blobs(repo)
 
 
 # Upload file to storage for specified blob

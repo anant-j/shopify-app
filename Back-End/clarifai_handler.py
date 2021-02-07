@@ -18,13 +18,13 @@ def is_NSFW(img_url):
     response = model.predict_by_url(url=img_url)
     sfw_score = 0
     nsfw_score = 0
-    if(response["outputs"][0]["data"]["concepts"][0]["name"] == "sfw"):
+    if response["outputs"][0]["data"]["concepts"][0]["name"] == "sfw":
         sfw_score = response["outputs"][0]["data"]["concepts"][0]["value"]
         nsfw_score = response["outputs"][0]["data"]["concepts"][1]["value"]
-    elif(response["outputs"][0]["data"]["concepts"][0]["name"] == "nsfw"):
+    elif response["outputs"][0]["data"]["concepts"][0]["name"] == "nsfw":
         nsfw_score = response["outputs"][0]["data"]["concepts"][0]["value"]
         sfw_score = response["outputs"][0]["data"]["concepts"][1]["value"]
-    if(nsfw_score > sfw_score):
+    if nsfw_score > sfw_score:
         return True
     else:
         return False

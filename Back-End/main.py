@@ -1,4 +1,3 @@
-# All Imports
 import os
 import json
 import random
@@ -71,9 +70,11 @@ def noapi():
     return redirect(redirectAddress)
 
 # Status for health check
+
+
 @app.route('/status')
 def status():
-    return ("up")
+    return "up"
 
 
 # Login endpoint
@@ -91,7 +92,7 @@ def login():
     authorization_url, state = discord.authorization_url(
         AUTHORIZATION_BASE_URL)
     session['DISCORD_OAUTH2_STATE'] = state
-    return (authorization_url)
+    return authorization_url
 
 
 # Callback endpoint
@@ -117,15 +118,15 @@ def callback():
 def userData():
     try:
         if(discord.authorized):  # If user is authorized/logged in
-            email = str(discord.fetch_user()) # Get user's email address
+            email = str(discord.fetch_user())  # Get user's email address
             data = storage.getUserStats(email)
             resp = make_response(jsonify(email=email, stats=data))
             return resp
         else:
             # User is not logged in, or is unauthorized
-            return ("Unauthorized", 401)
+            return "Unauthorized", 401
     except Exception as e:
-        return (str(e))
+        return str(e)
 
 
 # userimages endpoint
@@ -140,14 +141,14 @@ def userData():
 def userImages():
     try:
         if(discord.authorized):  # If user is authorized/logged in
-            email = str(discord.fetch_user()) # Get user's email address
+            email = str(discord.fetch_user())  # Get user's email address
             result = storage.list_img_urls_where("uploader", email)
-            return (",".join(result))
+            return ",".join(result)
         else:
             # User is not logged in, or is unauthorized
-            return ("Unauthorized", 401)
+            return "Unauthorized", 401
     except Exception as e:
-        return (str(e))
+        return str(e)
 
 
 # get_all_sfw endpoint
@@ -160,9 +161,9 @@ def userImages():
 def get_sfw_images():
     try:
         result = storage.list_img_urls_where("type", "SFW")
-        return (",".join(result))
+        return ",".join(result)
     except Exception as e:
-        return (str(e))
+        return str(e)
 
 
 # get_all_nsfw endpoint
@@ -177,12 +178,12 @@ def get_nsfw_images():
     try:
         if(discord.authorized):  # If user is authorized/logged in
             result = storage.list_img_urls_where("type", "NSFW")
-            return (",".join(result))
+            return ",".join(result)
         else:
             # User is not logged in, or is unauthorized
-            return ("Unauthorized", 401)
+            return "Unauthorized", 401
     except Exception as e:
-        return (str(e))
+        return str(e)
 
 
 # upload endpoint
@@ -195,13 +196,11 @@ def get_nsfw_images():
 @requires_authorization
 def uploadimg():
     try:
-        if(discord.authorized):  # If user is authorized/logged in
-            email = str(discord.fetch_user()) # Get user's email address
-            # Get the uploaded file
+        if(discord.authorized):
+            email = str(discord.fetch_user())
             uploaded_file = request.files["uploadedfile"]
-            # Get the uploaded file's name
             original_filename = secure_filename(uploaded_file.filename)
-            # Generate a random (32 byte) filename
+            # Generate a random (32 char) filename
             filename = random_name_gen(32)
             # If given filename is already used,
             # regenerate until a unique one is generated
@@ -221,7 +220,7 @@ def uploadimg():
             blob.make_public()  # Make blob publicly accessible
             # Get blob's URL, send it through Clarifai's API
             NSFW = clarifai.is_NSFW(blob.public_url)
-            data = storage.getAllUserData(email)  # Get all User's data
+            data = storage.getAllUserData(email)
             # If there are no stats for the user, set up the "stats" dictionary
             if("stats" not in data):
                 data["stats"] = {}
@@ -232,14 +231,12 @@ def uploadimg():
             if("images" not in data):
                 data["images"] = []
             if(NSFW):  # If image is NSFW
-                # Update metadata
                 metadata = {'type': 'NSFW', 'uploader': email,
                             "filename": original_filename}
                 blob.metadata = metadata
                 data["stats"]["total"] += 1
                 data["stats"]["nsfw_count"] += 1
-            else:  # If image is SFW
-                # Update metadata
+            else:
                 metadata = {'type': 'SFW', 'uploader': email,
                             "filename": original_filename}
                 blob.metadata = metadata
@@ -255,9 +252,9 @@ def uploadimg():
             return redirect(redirectAddress + "/my")
         else:
             # User is not logged in, or is unauthorized
-            return ("Unauthorized", 401)
+            return "Unauthorized", 401
     except Exception as e:
-        return (str(e))
+        return str(e)
 
 
 # delete endpoint
@@ -270,19 +267,17 @@ def uploadimg():
 @requires_authorization
 def delete_image():
     try:
-        if(discord.authorized):  # If user is authorized/logged in
-            email = str(discord.fetch_user())  # Get user's email address
-            imageid = request.args.get('id')  # Get requested image's id
-            data = storage.getAllUserData(email)  # Get all User's data
-            # For every blob in all images
+        if(discord.authorized):
+            email = str(discord.fetch_user())
+            imageid = request.args.get('id')
+            data = storage.getAllUserData(email)
             for blob in storage.get_blobs_list():
                 # If image uploader is the same as requester, and
                 # image name is the same as requested
-                if (blob.metadata["uploader"] ==
-                        email and blob.name == imageid):
-                    if(blob.metadata["type"] == "NSFW"):  # If image is NSFW
+                if blob.metadata["uploader"] == email and blob.name == imageid:
+                    if(blob.metadata["type"] == "NSFW"):
                         data["stats"]["nsfw_count"] -= 1
-                    else:  # If image is SFW
+                    else:
                         data["stats"]["sfw_count"] -= 1
                     data["stats"]["total"] -= 1
                     # Remove image from "images" array for user
@@ -290,12 +285,12 @@ def delete_image():
                     blob.delete()  # Delete image
             # Set storage in firebase with updated data
             storage.update_db(email, data)
-            return (str(redirectAddress + "/my"))
+            return str(redirectAddress + "/my")
         else:
             # User is not logged in, or is unauthorized
-            return ("Unauthorized", 401)
+            return "Unauthorized", 401
     except Exception as e:
-        return (str(e))
+        return str(e)
 
 
 # logout endpoint
@@ -310,18 +305,19 @@ def logout():
     discord.revoke()
     session.clear()
     resp = make_response("Logged out")
-    return (resp)
+    return resp
+
 
 # 404 error handler
 @app.errorhandler(404)
 def page_not_found(e):
-    return (redirect(redirectAddress))
+    return redirect(redirectAddress)
 
 
 # 500 error handler
 @app.errorhandler(500)
 def internal_server_error(e):
-    return (redirect(redirectAddress))
+    return redirect(redirectAddress)
 
 
 # Function to generate a random name consisting of
@@ -329,13 +325,12 @@ def internal_server_error(e):
 # Lowecase letters (a-z)
 # Numbers/Digits (0-9)
 def random_name_gen(size):
-    return (
-        ''.join(
-            random.choices(
-                string.ascii_uppercase +
-                string.digits +
-                string.ascii_lowercase,
-                k=size)))
+    return ''.join(
+        random.choices(
+            string.ascii_uppercase +
+            string.digits +
+            string.ascii_lowercase,
+            k=size))
 
 
 if __name__ == '__main__':
