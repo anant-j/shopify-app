@@ -26,9 +26,6 @@ This is a full stack application with the following components:
 2. Back-End consisting of a Flask (Python) API that the front-end interacts with.
 
   
-
-Deployed Version : [https://www.anant-j.com/shopify](https://www.anant-j.com/shopify) . Please give it a try!!
-
 ---
 
   
