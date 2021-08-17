@@ -263,12 +263,7 @@ Some potential future features:
 
 ---
 
-  
-
-### How is it deployed?
-
-The deployed version of this application can be found here : [https://anant-j.com/shopify](https://anant-j.com/shopify)
-
+ 
 #### Front-End
 
   
